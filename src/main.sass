@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Marvel:ital,wght@0,400;0,700;1,400;1,700&family=Russo+One&display=swap')
+
+
+// font-family: 'Marvel', sans-serif
+// font-family: 'Russo One', sans-serif
+
+
+*
+  margin: 0
+  padding: 0
+
+
+body
+  background: #1a1a1a
+  color: #fff
+  font-family: 'Marvel', sans-serif
+  padding: 30px 20px
+
+li
+  list-style: none
+
+nav
+  color: #fff
+  padding-right: 30px
+
+nav, nav ul
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+nav li
+  padding: 0 10px
+  text-transform: uppercase
+  font-weight: 700
+  border: 2px solid #1a1a1a
+  border-radius: 2px
+  padding: 5px 10px
+  margin-right: 10px
+  &.active
+    border-color: #e60073
+    color: #e60073
+
+nav li:not(nav li.active)
+  &:hover
+    color: #fff500
+    border-color: #fff500
+
+h1
+  font-family: 'Russo One', sans-serif
+  text-transform: uppercase
+  letter-spacing: 10px
+  font-size: 50px
+  text-align: center
+  -webkit-animation: glow 1s ease-in-out infinite alternate
+  -moz-animation: glow 1s ease-in-out infinite alternate
+  animation: glow 1s ease-in-out infinite alternate
+
+@-webkit-keyframes glow
+  from
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073
+  to
+    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6
+
+#cars-factory
+  margin: 50px 0
+  display: flex
+  justify-content: space-between
+  align-items: flex-end
+
+.forms
+  display: block
+  position: relative
+  margin: 15px 0
+
+.forms input[type="submit"]
+  font-family: 'Russo One', sans-serif
+  width: 120px
+  height: 26px
+  border: none
+  border-radius: 3px
+  text-transform: uppercase
+  background: #7fff00
+  margin-left: 20px
+  cursor: pointer
+
+.forms input[type="submit"]
+  &:hover
+    background: #00e614
+
+
+.forms input[type="text"]
+  height: 30px
+  width: 170px
+  border-radius: 4px
+  border: 2px solid #ff4da6
+  background: rgba(255, 0, 0, 0)
+  box-sizing: border-box
+  color: #fff
+  padding: 3px 30px 3px 5px
+
+input[type="color"]
+  width: 20px
+  height: 23px
+  appearance: none
+  -moz-appearance: none
+  -webkit-appearance: none
+  background: none
+  border: 0
+  cursor: pointer
+  padding: 0
+  position: absolute
+  left: 145px
+  top: 3px
+  z-index: 1000
+
+input[type="color"]::-webkit-color-swatch
+  border-radius: 50%
+  border: none
+
+#game-controller
+  display: flex
+  margin-bottom: 15px
+
+.game-controller-btn
+  padding: 5px 10px
+  margin-right: 15px
+  background: #fff500
+  border-radius: 3px
+  text-transform: uppercase
+  font-weight: 700
+  color: #000
+  cursor: pointer
+  height: 26px
+  box-sizing: border-box
+  display: flex
+  align-items: center
+
+.game-controller-btn:hover
+  background: #ff5722
+  color: #fff
+
+.car-container
+  position: relative
+  padding: 0 20px
+
+.car-name
+  text-align: center
+  font-style: italic
+  margin-bottom: 10px
+  color: #7fff00
+
+.road
+  border-radius: 5px
+  background: #777777
+  transform: skewX(-35deg)
+  height: 55px
+  position: relative
+
+.road::after
+  content: ""
+  position: absolute
+  width: 100%
+  border-bottom: 2px dashed #fff
+  top: 27px
+  left: 0
+
+.finish
+  position: absolute
+  top: 0
+  right: 150px
+  height: 55px
+  width: 10px
+  background: url(../assets/img/finish.jpg) center center no-repeat
+  background-size: cover
+  transform: skewX(-40deg)
+
+.car
+  position: absolute
+  top: 8px
+  left: 30px
+
+.car svg
+  width: 120px
+
+.car-control
+  display: flex
+  margin-top: 20px
+
+.car-control-btn
+  height: 26px
+  padding: 0 15px
+  display: flex
+  align-items: center
+  justify-content: center
+  color: #7fff00
+  border: 2px solid #7fff00
+  border-radius: 3px
+  margin-right: 10px
+
+.car-control-btn:hover
+  background: #7fff00
+  color: #fff
+
+#garage-pagination
+  display: flex
+  justify-content: center
+  align-items: center
+  color: #7fff00
+  font-weight: 700
+  margin-top: 15px
+
+#garage-pagination li
+  cursor: pointer
+  border-radius: 3px
+  height: 15px
+  width: 15px
+  display: flex
+  justify-content: center
+  align-items: center
+
+#garage-pagination li:not(#garage-pagination li:last-child)
+  margin-right: 10px
+
+#garage-pagination li:not(#garage-pagination li.current):hover
+  background: #fff
+  color: #000
+
+#garage-pagination li.current
+  background: #7fff00
+  color: #000
+
+@media only screen and (max-width: 700px)
+  #cars-factory
+    flex-direction: column
+    align-items: center
+
+  nav
+    flex-direction: column
+
+  nav ul
+    order: 2
+    margin-top: 50px
+
+  h1
+    order: 1
