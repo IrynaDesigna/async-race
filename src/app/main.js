@@ -1,3 +1,5 @@
+import {getCars} from './garage-render';
+
 export const body = document.querySelector('body');
 export const nav = document.createElement('nav');
 export const pages = document.createElement('ul');
@@ -118,6 +120,15 @@ export const url = 'http://localhost:3000/';
    }
  }
 
+ //CLEAR
+export function clearContainer(parent) {
+    var child = parent.lastElementChild;
+    while (child) {
+        parent.removeChild(child);
+        child = parent.lastElementChild;
+    }
+  }
+
 // DELETE Car
 export function deleteTheCar(car) {
      console.log('Car is deleted!');
@@ -171,3 +182,131 @@ export function deleteTheCar(car) {
 
      });
    }
+ // Create Car
+ inputSubmitCreate.addEventListener('click', function(e) {
+     e.preventDefault();
+     console.log('New car is created');
+
+     if (this.parentNode.childNodes[0].value === '') {alert("Enter car's name")}
+     else {
+       const car =   {
+         name: this.parentNode.childNodes[0].value,
+         color: this.parentNode.childNodes[1].value
+       };
+
+       fetch(`${url}garage`,{
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify(car),
+       })
+       .then((response) => response.json())
+       .then((car) => {
+         clearContainer(carsContainer);
+         getCars(1);
+         this.parentNode.childNodes[0].value === '';
+       });
+     }
+   });
+
+winnersPage.onclick = function(){
+  garage.style.display = 'none';
+  garagePage.classList.toggle('active');
+  winnersPage.classList.toggle('active');
+  winners.style.display = 'block';
+};
+
+garagePage.onclick = function(){
+  winners.style.display = 'none';
+  garagePage.classList.toggle('active');
+  winnersPage.classList.toggle('active');
+  garage.style.display = 'block';
+};
+
+generateCarsBtn.onclick = function(){generateCars()};
+
+
+function generateCar() {
+  let newCar = {}
+
+  function getRandomColor() {
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+     return newCar.color = color;
+  }
+  function getRandomCarName() {
+    let carNames = [
+      'BMW',
+      'Mercedes-Benz',
+      'Audi',
+      'Toyota',
+      'Honda',
+      'Ford',
+      'Chevrolet',
+      'Hyundai',
+      'Nissan',
+      'Subaru',
+      'Kia',
+      'Mazda',
+      'Volkswagen',
+      'Volvo'
+    ];
+
+    let carModels = [
+      'Accord',
+      'Camry',
+      'Civic',
+      'Corolla',
+      'Fiesta',
+      'Focus',
+      'Jetta',
+      'Malibu',
+      'Altima',
+      'Sentra',
+      'Sonata',
+      'Taurus',
+      'Accent',
+      'Elantra',
+      'Forte',
+      'Optima'
+    ];
+
+     function random(arr) {
+      let randomIndex = Math.floor(Math.random() * arr.length);
+      return randomIndex
+    }
+    return newCar.name = carNames[random(carNames)] + ' ' + carModels[random(carModels)]
+  }
+
+  getRandomColor();
+  getRandomCarName();
+  return newCar
+
+}
+
+function generateCars() {
+  let i = 1;
+  while ( i <= 100) {
+    i++;
+    const newCar = generateCar();
+    // console.log(newCar);
+    fetch(`${url}garage`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newCar),
+    })
+    .then((response) => response.json())
+    .then((car) => {
+
+    });
+
+  }
+  clearContainer(carsContainer);
+  getCars();
+}

@@ -1,2 +1,4 @@
 node_modules
 dist/
+src/app/blah.js
+scr/app/blah-v1.js

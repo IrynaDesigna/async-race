@@ -1,4 +1,6 @@
-import {garagePagination} from './main'
+import {garagePagination,carsContainer} from './main';
+import {getCars} from './garage-render';
+
 
 export function paginate(array, page_size, page_number) {
   garagePagination.childNodes[page_number-1].classList.add('current');

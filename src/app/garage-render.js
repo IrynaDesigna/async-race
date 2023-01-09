@@ -1,7 +1,7 @@
 import {canvas} from './canvas';
 import {page, url, resetBtn, raceBtn, resetCars, carSelection, deleteTheCar, carsContainer} from './main';
 import {getPagination, paginate} from './pagination';
-import {race,startEngine} from './race';
+import {race,startEngine,stopRace} from './race';
 
 
 export function getCars(page) {
@@ -10,13 +10,13 @@ export function getCars(page) {
       })
       .then((response) => response.json())
       .then((cars) => {
-        // clearContainer(carsContainer);
         getPagination(cars);
-        console.log(cars.length);
         let thisPageCars;
-        if (page){
+        if (page) {
           thisPageCars = paginate(cars,7,page);
-        } else { thisPageCars = paginate(cars,7,1); };
+        } else { 
+          thisPageCars = paginate(cars,7,1);
+        };
 
         for (const car of thisPageCars) {
           buildCar(car.name,car.color,car.id);
@@ -40,6 +40,7 @@ export function getCars(page) {
           deleteCar = document.createElement('div'),
           play = document.createElement('div'),
           stop = document.createElement('div');
+
 
     carsContainer.appendChild(theCar);
     theCar.appendChild(carName);
@@ -74,5 +75,5 @@ export function getCars(page) {
     deleteCar.onclick = function(){deleteTheCar(deleteCar)};
     select.onclick = function(){carSelection(select)};
     play.onclick = function(){startEngine(play,stop)};
-    // stop.onclick = function(){stopEngine(stop)};
+    stop.onclick = function(){stopRace(id,theCar)};
   }

@@ -23,8 +23,6 @@ export function race(thisPageCars) {
         }
       };
 
-
-
 export function startEngine(startBtn, stopBtn) {
         let id = startBtn.parentNode.parentElement.id;
         fetch(`${url}engine?id=${id}&status=started`, {
@@ -38,12 +36,9 @@ export function startEngine(startBtn, stopBtn) {
         });
       };
 
-
-
 function startRace(id,car,carData, stopBtn){
   if (car.getBoundingClientRect().x !== 50) {
-    alert('Car is alredy participated in a race! Reset the game.');
-    // startRace.stop();
+    alert('Car is alredy participated in a race! Reset the game.')
     return
   } else {
     let distance = car.parentElement.clientWidth - 180;
@@ -52,7 +47,6 @@ function startRace(id,car,carData, stopBtn){
       raceAnimation(id,stopBtn,car,time,distance);
     } catch (e) {
       console.error(e);
-      raceAnimation = false;
     }
   }
 };
@@ -61,11 +55,23 @@ function raceAnimation(id,stopBtn,car,time,distance){
   car.style.transform = `translateX(${distance}px)`;
   car.style.transition = `transform ${time/1000}s ease-out`;
 
-  // stop - this function, prevent request by clicking stop-btn
-  if (stopBtn.onclick = function(){ raceAnimation.stop()});
+  drive(id,car);
+};
 
+export function stopRace(id,car) {
+  fetch(`${url}engine?id=${id}&status=stopped`, {
+    method: 'PATCH'
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    console.log('stopped!');
+    drive(id,car);
+    stop();
+    return
+  });
+};
 
-  // engine request
+function drive(id,car) {
   fetch(`${url}engine?id=${id}&status=drive`, {
     method: 'PATCH'
   })
@@ -74,8 +80,12 @@ function raceAnimation(id,stopBtn,car,time,distance){
     console.log(data);
   })
   .catch((error) => {
-    let stop = car.getBoundingClientRect().x;
-    car.style.transform = `translateX(${stop}px)`;
+    // if( car.childNodes[1].childNodes[2] !== undefined ) {
+      let stop = car.childNodes[1].childNodes[2].getBoundingClientRect().x;
+      car.childNodes[1].childNodes[2].style.transition = 'none';
+      car.childNodes[1].childNodes[2].style.transform = `translateX(${stop}px)`;
+    // }
+
     console.log('Ooops, ' + car.parentElement.parentElement.childNodes[0].innerText + `'s engine is died!'`);
   });
-};
+}
