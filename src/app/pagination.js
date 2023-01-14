@@ -1,42 +1,37 @@
-import {garagePagination,carsContainer} from './main';
+import {garagePagination,carsContainer,clearContainer} from './main';
 import {getCars} from './garage-render';
+import {getWinners} from './winners-render';
 
-
-export function paginate(array, page_size, page_number) {
-  garagePagination.childNodes[page_number-1].classList.add('current');
+export function paginate(page,array, page_size, page_number) {
+  page.childNodes[page_number-1].classList.add('current');
   let newCarsArr = array.slice((page_number - 1) * page_size, page_number * page_size);
   return newCarsArr;
 }
 
-export function getPagination(cars) {
-  clearContainer(garagePagination);
+export function getPagination(cars,page,container) {
+  clearContainer(page);
 
   let pagesNums = Math.ceil(cars.length / 7);
   for (let i = 1; i <=pagesNums; i++ ) {
     let paginationPage = document.createElement('li');
-    garagePagination.appendChild(paginationPage);
+    page.appendChild(paginationPage);
     paginationPage.innerText = i;
 
     paginationPage.classList.add('switch-page');
     paginationPage.onclick = function() {
-      console.log('clicked');
-      console.log(this);
       if (this.classList.contains('current')) {console.log(true);return}
       else {
         document.querySelector('.current').classList.remove('current');
 
         this.classList.add('current');
-        clearContainer(carsContainer);
-        getCars(this.innerText);
+        clearContainer(container);
+        if (page === garagePagination) {
+          getCars(this.innerText);
+        } else {
+          getWinners(this.innerText);
+        }
+
       };
     };
-  }
-}
-
-function clearContainer(parent) {
-  var child = parent.lastElementChild;
-  while (child) {
-      parent.removeChild(child);
-      child = parent.lastElementChild;
   }
 }

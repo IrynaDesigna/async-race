@@ -1,21 +1,18 @@
 import {canvas} from './canvas';
-import {page, url, resetBtn, raceBtn, resetCars, carSelection, deleteTheCar, carsContainer} from './main';
+import {page, url, resetBtn, raceBtn, resetCars, carSelection, deleteTheCar, garagePagination, carsContainer} from './main';
 import {getPagination, paginate} from './pagination';
 import {race,startEngine,stopRace} from './race';
 
-
 export function getCars(page) {
-      return fetch(`${url}garage`, {
-        method: 'GET'
-      })
-      .then((response) => response.json())
+      return fetch(`${url}garage`,{method: 'GET'}).then((res) => res.json())
       .then((cars) => {
-        getPagination(cars);
+        // getPagination(cars);
+        getPagination(cars,garagePagination,carsContainer)
         let thisPageCars;
         if (page) {
-          thisPageCars = paginate(cars,7,page);
-        } else { 
-          thisPageCars = paginate(cars,7,1);
+          thisPageCars = paginate(garagePagination,cars,7,page);
+        } else {
+          thisPageCars = paginate(garagePagination,cars,7,1);
         };
 
         for (const car of thisPageCars) {
@@ -23,7 +20,6 @@ export function getCars(page) {
         };
         resetBtn.onclick = function(){resetCars()};
         raceBtn.onclick = function(){race(thisPageCars)};
-
       });
   };
 
@@ -55,6 +51,7 @@ export function getCars(page) {
     finish.classList.add('finish');
     carContainer.appendChild(carWrapper);
     carWrapper.classList.add('car');
+    carWrapper.setAttribute('id', `car-${id}`);
     carWrapper.innerHTML = canvas;
     carWrapper.childNodes[4].childNodes[5].style.fill = color;
     theCar.appendChild(carControl);
@@ -73,7 +70,7 @@ export function getCars(page) {
     stop.innerHTML = '<i class="fa-solid fa-stop"></i>';
 
     deleteCar.onclick = function(){deleteTheCar(deleteCar)};
-    select.onclick = function(){carSelection(select)};
-    play.onclick = function(){startEngine(play,stop)};
-    stop.onclick = function(){stopRace(id,theCar)};
+    select.onclick = function(){this.classList.add('selected-car');carSelection(this,id,carName,carWrapper)};
+    play.onclick = function(){startEngine(id,carWrapper,name)};
+    stop.onclick = function(){stopRace(id,carWrapper)};
   }

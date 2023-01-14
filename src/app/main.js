@@ -12,6 +12,7 @@ export const winners = document.createElement('div');
 export const carsFactory = document.createElement('div');
 export const carsContainer = document.createElement('ul');
 export const garagePagination = document.createElement('ul');
+export const winnersPagination = document.createElement('ul');
 export const formsWrapper = document.createElement('div');
 export const createCar = document.createElement('form');
 export const editCar = document.createElement('form');
@@ -110,122 +111,103 @@ export const url = 'http://localhost:3000/';
  generateCarsBtn.classList.add('game-controller-btn');
  generateCarsBtn.innerText = 'Generate cars';
 
- // RSERT Cars
+ // RESET Cars
  export function resetCars(){
+
    let cars = document.getElementsByClassName('car');
    for (let i = 0; i < cars.length; i++) {
      if (cars[i].getBoundingClientRect().x !== 50) {
+       cars[i].style.transition = `transform 1s ease-out`;
        cars[i].style.transform = `translateX(0px)`;
      }
+
    }
  }
 
  //CLEAR
 export function clearContainer(parent) {
-    var child = parent.lastElementChild;
-    while (child) {
-        parent.removeChild(child);
-        child = parent.lastElementChild;
-    }
+  var child = parent.lastElementChild;
+  while (child) {
+    parent.removeChild(child);
+    child = parent.lastElementChild;
   }
+}
 
 // DELETE Car
-export function deleteTheCar(car) {
-     console.log('Car is deleted!');
-     let id = car.parentNode.parentElement.id;
-     car.parentNode.parentElement.remove()
-
-     fetch(`${url}garage/${id}`, {
-       method: 'DELETE'
-     });
-   }
+export async function deleteTheCar(car) {
+  let del = car.parentNode.parentElement;
+  await fetch(`${url}garage/${del.id}`,{method: 'DELETE'});
+  del.remove();
+  console.log('Car is deleted!');
+}
 
    // SELECT car
-  export function carSelection(car) {
-     console.log('Car is selected!');
-     car.style.background = '#7fff00';
-     car.style.color = '#000';
+export function carSelection(selectBtn,id,carName, carColor) {
+   selectBtn.style.background = '#7fff00';
+   selectBtn.style.color = '#000';
+   console.log('Car is selected!');
+   inputSubmitEdit.addEventListener('click',function(e){e.preventDefault();editThisCar(this,selectBtn,id,carName,carColor)});
+ }
 
-     let id = car.parentNode.parentElement.id;
+// EDIT Car
+ async function editThisCar(btn,selectBtn,id,carName, carColor) {
+   if (!selectBtn.classList.contains('selected-car')) {return}
+   const [newNname, newColor] = btn.parentNode.childNodes;
+   const selectedCar = { color: newColor.value };
 
-     inputSubmitEdit.addEventListener('click', function(e) {
-       e.preventDefault();
-       console.log('The car is edited');
-       const selectedCar =   {
-         color: this.parentNode.childNodes[1].value
-       };
-
-       if (this.parentNode.childNodes[0].value === '') {
-         selectedCar.name = car.parentNode.parentNode.childNodes[0].innerText;
-       } else {
-         selectedCar.name = this.parentNode.childNodes[0].value;
-         car.parentNode.parentNode.childNodes[0].innerText = '- - - ' + this.parentNode.childNodes[0].value + ' - - -';
-       }
-
-       car.parentNode.parentNode.childNodes[1].childNodes[2].childNodes[4].childNodes[5].style.fill = this.parentNode.childNodes[1].value;
-
-
-       fetch(`${url}garage/${id}`, {
-         method: 'PUT',
-         headers: {
-           'Content-Type': 'application/json',
-         },
-         body: JSON.stringify(selectedCar)
-       })
-       .then((response) => response.json())
-       .then((data) => {
-         console.log(data);
-         this.parentNode.childNodes[0].value = '';
-         car.style.background = 'none';
-         car.style.color = '#7fff00';
-       });
-
-     });
+   if (newNname.length === 0) { selectedCar.name = carName.innerText }
+   else {
+     selectedCar.name = newNname.value;
+     carName.innerText = '- - - ' + newNname.value + ' - - -';
    }
+   carColor.childNodes[4].childNodes[5].style.fill = newColor.value;
+
+   await fetch(`${url}garage/${id}`,{method: 'PUT',headers: {'Content-Type': 'application/json'},body: JSON.stringify(selectedCar)});
+   newNname.value = '';
+
+   selectBtn.style.background = 'none';
+   selectBtn.style.color = '#7fff00';
+   console.log('Car is edited!');
+   return selectBtn.classList.remove('selected-car')
+ }
+
  // Create Car
- inputSubmitCreate.addEventListener('click', function(e) {
+ inputSubmitCreate.addEventListener('click', async function(e) {
      e.preventDefault();
-     console.log('New car is created');
+     const [firstChildNode, secondChildNode] = this.parentNode.childNodes;
 
-     if (this.parentNode.childNodes[0].value === '') {alert("Enter car's name")}
-     else {
-       const car =   {
-         name: this.parentNode.childNodes[0].value,
-         color: this.parentNode.childNodes[1].value
-       };
-
-       fetch(`${url}garage`,{
-         method: 'POST',
-         headers: {
-           'Content-Type': 'application/json',
-         },
-         body: JSON.stringify(car),
-       })
-       .then((response) => response.json())
-       .then((car) => {
-         clearContainer(carsContainer);
-         getCars(1);
-         this.parentNode.childNodes[0].value === '';
-       });
+     if (firstChildNode === '') {
+       alert("Enter car's name");
+       return
      }
+     const car =   {
+       name: firstChildNode.value,
+       color: secondChildNode.value
+     };
+
+     await fetch(`${url}garage`,{ method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(car)});
+     clearContainer(carsContainer);
+     await getCars(1);
+     firstChildNode === '';
+     console.log('New car is created!');
+     return
    });
 
-winnersPage.onclick = function(){
-  garage.style.display = 'none';
-  garagePage.classList.toggle('active');
-  winnersPage.classList.toggle('active');
-  winners.style.display = 'block';
-};
+// PAGE-NAVIGATION
+ function pageCLick(openBtn, openPage, closeBtn, closePage) {
+   openBtn.onclick = function(){
+     closePage.style.display = 'none';
+     closeBtn.classList.toggle('active');
+     openBtn.classList.toggle('active');
+     openPage.style.display = 'block';
+   };
+ }
 
-garagePage.onclick = function(){
-  winners.style.display = 'none';
-  garagePage.classList.toggle('active');
-  winnersPage.classList.toggle('active');
-  garage.style.display = 'block';
-};
+ pageCLick(winnersPage,winners,garagePage,garage);
+ pageCLick(garagePage,garage,winnersPage,winners);
 
+// 100 random cars - Generstion
 generateCarsBtn.onclick = function(){generateCars()};
-
 
 function generateCar() {
   let newCar = {}
@@ -285,27 +267,14 @@ function generateCar() {
   getRandomColor();
   getRandomCarName();
   return newCar
-
 }
 
 function generateCars() {
   let i = 1;
   while ( i <= 100) {
     i++;
-    const newCar = generateCar();
-    // console.log(newCar);
-    fetch(`${url}garage`,{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newCar),
-    })
-    .then((response) => response.json())
-    .then((car) => {
-
-    });
-
+    const car = generateCar();
+    fetch(`${url}garage`,{method: 'POST',headers:{'Content-Type': 'application/json',},body: JSON.stringify(car)})
   }
   clearContainer(carsContainer);
   getCars();

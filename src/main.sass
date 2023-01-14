@@ -202,7 +202,7 @@ input[type="color"]::-webkit-color-swatch
   background: #7fff00
   color: #fff
 
-#garage-pagination
+#garage-pagination, #winners-pagination
   display: flex
   justify-content: center
   align-items: center
@@ -210,7 +210,7 @@ input[type="color"]::-webkit-color-swatch
   font-weight: 700
   margin-top: 15px
 
-#garage-pagination li
+#garage-pagination li, #winners-pagination li
   cursor: pointer
   border-radius: 3px
   height: 15px
@@ -219,14 +219,14 @@ input[type="color"]::-webkit-color-swatch
   justify-content: center
   align-items: center
 
-#garage-pagination li:not(#garage-pagination li:last-child)
+#garage-pagination li:not(#garage-pagination li:last-child), #winners-pagination li:not(#garage-pagination li:last-child)
   margin-right: 10px
 
-#garage-pagination li:not(#garage-pagination li.current):hover
+#garage-pagination li:not(#garage-pagination li.current):hover, #winners-pagination li:not(#garage-pagination li.current):hover
   background: #fff
   color: #000
 
-#garage-pagination li.current
+#garage-pagination li.current, #winners-pagination li.current
   background: #7fff00
   color: #000
 
@@ -234,6 +234,8 @@ input[type="color"]::-webkit-color-swatch
   display: none
   .car
     position: relative
+    left: 0
+    top: 0
 
 #winners-nav
   display: flex
@@ -242,14 +244,33 @@ input[type="color"]::-webkit-color-swatch
   li
     width: calc(100%/5)
     text-align: center
+    border: 1px solid #fff
+
+#wins:hover, #best-time:hover
+  color: #000
+  background: #fff
+  cursor: pointer
 
 .winner-descr
   display: flex
   justify-content: space-between
   margin-top: 70px
+  padding-bottom: 10px
+  position: relative
+  &:not(&:last-child)
+    border-bottom: 1px solid
   li
     width: calc(100%/5)
-    text-align: center    
+    text-align: center
+
+.delete-winner
+  position: absolute
+  left: -40px
+  top: -10px
+  padding: 10px
+  &:hover
+    color: #fff500
+    cursor: pointer
 
 @media only screen and (max-width: 700px)
   #cars-factory
@@ -265,3 +286,6 @@ input[type="color"]::-webkit-color-swatch
 
   h1
     order: 1
+
+  #winners .car svg
+    width: 80px
