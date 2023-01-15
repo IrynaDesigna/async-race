@@ -1,32 +1,32 @@
 import {getCars} from './garage-render';
 
-export const body = document.querySelector('body');
-export const nav = document.createElement('nav');
-export const pages = document.createElement('ul');
-export const garagePage = document.createElement('li');
-export const winnersPage = document.createElement('li');
-export const pageTitle = document.createElement('h1');
-export const main = document.createElement('main');
-export const garage = document.createElement('div');
-export const winners = document.createElement('div');
-export const carsFactory = document.createElement('div');
-export const carsContainer = document.createElement('ul');
-export const garagePagination = document.createElement('ul');
-export const winnersPagination = document.createElement('ul');
-export const formsWrapper = document.createElement('div');
-export const createCar = document.createElement('form');
-export const editCar = document.createElement('form');
-export const inputTextCreate = document.createElement('input');
-export const inputColorCreate = document.createElement('input');
-export const inputSubmitCreate = document.createElement('input');
-export const inputTextEdit = document.createElement('input');
-export const inputColorEdit = document.createElement('input');
-export const inputSubmitEdit = document.createElement('input');
-export const gameController = document.createElement('div');
-export const raceBtn = document.createElement('div');
-export const resetBtn = document.createElement('div');
-export const generateCarsBtn = document.createElement('div');
-export const url = 'http://localhost:3000/';
+export const body = document.querySelector('body'),
+             nav = document.createElement('nav'),
+             pages = document.createElement('ul'),
+             garagePage = document.createElement('li'),
+             winnersPage = document.createElement('li'),
+             pageTitle = document.createElement('h1'),
+             main = document.createElement('main'),
+             garage = document.createElement('div'),
+             winners = document.createElement('div'),
+             carsFactory = document.createElement('div'),
+             carsContainer = document.createElement('ul'),
+             garagePagination = document.createElement('ul'),
+             winnersPagination = document.createElement('ul'),
+             formsWrapper = document.createElement('div'),
+             createCar = document.createElement('form'),
+             editCar = document.createElement('form'),
+             inputTextCreate = document.createElement('input'),
+             inputColorCreate = document.createElement('input'),
+             inputSubmitCreate = document.createElement('input'),
+             inputTextEdit = document.createElement('input'),
+             inputColorEdit = document.createElement('input'),
+             inputSubmitEdit = document.createElement('input'),
+             gameController = document.createElement('div'),
+             raceBtn = document.createElement('div'),
+             resetBtn = document.createElement('div'),
+             generateCarsBtn = document.createElement('div'),
+             url = 'http://localhost:3000/';
 
  body.appendChild(nav);
  body.appendChild(main);
@@ -111,20 +111,18 @@ export const url = 'http://localhost:3000/';
  generateCarsBtn.classList.add('game-controller-btn');
  generateCarsBtn.innerText = 'Generate cars';
 
- // RESET Cars
- export function resetCars(){
+// RESET Cars
+export function resetCars(){
+  let cars = document.getElementsByClassName('car');
+  for (let i = 0; i < cars.length; i++) {
+    if (cars[i].getBoundingClientRect().x !== 50) {
+     cars[i].style.transition = `transform 1s ease-out`;
+     cars[i].style.transform = `translateX(0px)`;
+    }
+  }
+}
 
-   let cars = document.getElementsByClassName('car');
-   for (let i = 0; i < cars.length; i++) {
-     if (cars[i].getBoundingClientRect().x !== 50) {
-       cars[i].style.transition = `transform 1s ease-out`;
-       cars[i].style.transform = `translateX(0px)`;
-     }
-
-   }
- }
-
- //CLEAR
+//CLEAR
 export function clearContainer(parent) {
   var child = parent.lastElementChild;
   while (child) {
@@ -138,70 +136,74 @@ export async function deleteTheCar(car) {
   let del = car.parentNode.parentElement;
   await fetch(`${url}garage/${del.id}`,{method: 'DELETE'});
   del.remove();
+  let page = document.querySelector('.current');
+  getCars(page.innerText);
   console.log('Car is deleted!');
 }
 
    // SELECT car
 export function carSelection(selectBtn,id,carName, carColor) {
-   selectBtn.style.background = '#7fff00';
-   selectBtn.style.color = '#000';
-   console.log('Car is selected!');
-   inputSubmitEdit.addEventListener('click',function(e){e.preventDefault();editThisCar(this,selectBtn,id,carName,carColor)});
- }
+  selectBtn.style.background = '#7fff00';
+  selectBtn.style.color = '#000';
+  console.log('Car is selected!');
+  inputSubmitEdit.addEventListener('click',function(e){
+    e.preventDefault();
+    editThisCar(this,selectBtn,id,carName,carColor)
+  });
+}
 
 // EDIT Car
- async function editThisCar(btn,selectBtn,id,carName, carColor) {
-   if (!selectBtn.classList.contains('selected-car')) {return}
-   const [newNname, newColor] = btn.parentNode.childNodes;
-   const selectedCar = { color: newColor.value };
+async function editThisCar(btn,selectBtn,id,carName, carColor) {
+  if (!selectBtn.classList.contains('selected-car')) {return}
+  const [newNname, newColor] = btn.parentNode.childNodes,
+       selectedCar = { color: newColor.value };
 
-   if (newNname.length === 0) { selectedCar.name = carName.innerText }
-   else {
-     selectedCar.name = newNname.value;
-     carName.innerText = '- - - ' + newNname.value + ' - - -';
-   }
-   carColor.childNodes[4].childNodes[5].style.fill = newColor.value;
+  if (newNname.length === 0) { selectedCar.name = carName.innerText }
+  else {
+   selectedCar.name = newNname.value;
+   carName.innerText = '- - - ' + newNname.value + ' - - -';
+  }
+  carColor.childNodes[4].childNodes[5].style.fill = newColor.value;
 
-   await fetch(`${url}garage/${id}`,{method: 'PUT',headers: {'Content-Type': 'application/json'},body: JSON.stringify(selectedCar)});
-   newNname.value = '';
-
-   selectBtn.style.background = 'none';
-   selectBtn.style.color = '#7fff00';
-   console.log('Car is edited!');
-   return selectBtn.classList.remove('selected-car')
- }
+  await fetch(`${url}garage/${id}`,{method: 'PUT',headers: {'Content-Type': 'application/json'},body: JSON.stringify(selectedCar)});
+  newNname.value = '';
+  selectBtn.style.background = 'none';
+  selectBtn.style.color = '#7fff00';
+  console.log('Car is edited!');
+  return selectBtn.classList.remove('selected-car')
+}
 
  // Create Car
- inputSubmitCreate.addEventListener('click', async function(e) {
-     e.preventDefault();
-     const [firstChildNode, secondChildNode] = this.parentNode.childNodes;
+inputSubmitCreate.addEventListener('click', async function(e) {
+  e.preventDefault();
+  const [firstChildNode, secondChildNode] = this.parentNode.childNodes;
 
-     if (firstChildNode === '') {
-       alert("Enter car's name");
-       return
-     }
-     const car =   {
-       name: firstChildNode.value,
-       color: secondChildNode.value
-     };
+  if (firstChildNode === '') {
+    alert("Enter car's name");
+    return
+  }
+  const car =   {
+    name: firstChildNode.value,
+    color: secondChildNode.value
+  };
 
-     await fetch(`${url}garage`,{ method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(car)});
-     clearContainer(carsContainer);
-     await getCars(1);
-     firstChildNode === '';
-     console.log('New car is created!');
-     return
-   });
+  await fetch(`${url}garage`,{ method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(car)});
+  clearContainer(carsContainer);
+  await getCars(1);
+  firstChildNode === '';
+  console.log('New car is created!');
+  return
+});
 
 // PAGE-NAVIGATION
- function pageCLick(openBtn, openPage, closeBtn, closePage) {
-   openBtn.onclick = function(){
-     closePage.style.display = 'none';
-     closeBtn.classList.toggle('active');
-     openBtn.classList.toggle('active');
-     openPage.style.display = 'block';
-   };
- }
+function pageCLick(openBtn, openPage, closeBtn, closePage) {
+  openBtn.onclick = function(){
+    closePage.style.display = 'none';
+    closeBtn.classList.toggle('active');
+    openBtn.classList.toggle('active');
+    openPage.style.display = 'block';
+  };
+}
 
  pageCLick(winnersPage,winners,garagePage,garage);
  pageCLick(garagePage,garage,winnersPage,winners);

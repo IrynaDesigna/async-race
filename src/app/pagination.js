@@ -2,12 +2,14 @@ import {garagePagination,carsContainer,clearContainer} from './main';
 import {getCars} from './garage-render';
 import {getWinners} from './winners-render';
 
+// GETTING Cars on the current page
 export function paginate(page,array, page_size, page_number) {
   page.childNodes[page_number-1].classList.add('current');
   let newCarsArr = array.slice((page_number - 1) * page_size, page_number * page_size);
   return newCarsArr;
 }
 
+// Pagination
 export function getPagination(cars,page,container) {
   clearContainer(page);
 

@@ -14,7 +14,7 @@ body
   background: #1a1a1a
   color: #fff
   font-family: 'Marvel', sans-serif
-  padding: 30px 20px
+  padding: 10px 20px
 
 li
   list-style: none
@@ -50,7 +50,7 @@ h1
   font-family: 'Russo One', sans-serif
   text-transform: uppercase
   letter-spacing: 10px
-  font-size: 50px
+  font-size: 30px
   text-align: center
   -webkit-animation: glow 1s ease-in-out infinite alternate
   -moz-animation: glow 1s ease-in-out infinite alternate
@@ -63,7 +63,6 @@ h1
     text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6
 
 #cars-factory
-  margin: 50px 0
   display: flex
   justify-content: space-between
   align-items: flex-end
@@ -76,7 +75,7 @@ h1
 .forms input[type="submit"]
   font-family: 'Russo One', sans-serif
   width: 120px
-  height: 26px
+  height: 20px
   border: none
   border-radius: 3px
   text-transform: uppercase
@@ -90,7 +89,7 @@ h1
 
 
 .forms input[type="text"]
-  height: 30px
+  height: 20px
   width: 170px
   border-radius: 4px
   border: 2px solid #ff4da6
@@ -100,8 +99,8 @@ h1
   padding: 3px 30px 3px 5px
 
 input[type="color"]
-  width: 20px
-  height: 23px
+  width: 14px
+  height: 16px
   appearance: none
   -moz-appearance: none
   -webkit-appearance: none
@@ -110,7 +109,7 @@ input[type="color"]
   cursor: pointer
   padding: 0
   position: absolute
-  left: 145px
+  left: 153px
   top: 3px
   z-index: 1000
 
@@ -131,7 +130,7 @@ input[type="color"]::-webkit-color-swatch
   font-weight: 700
   color: #000
   cursor: pointer
-  height: 26px
+  height: 20px
   box-sizing: border-box
   display: flex
   align-items: center
@@ -147,14 +146,14 @@ input[type="color"]::-webkit-color-swatch
 .car-name
   text-align: center
   font-style: italic
-  margin-bottom: 10px
+  margin-bottom: 5px
   color: #7fff00
 
 .road
   border-radius: 5px
   background: #777777
   transform: skewX(-35deg)
-  height: 55px
+  height: 25px
   position: relative
 
 .road::after
@@ -162,14 +161,14 @@ input[type="color"]::-webkit-color-swatch
   position: absolute
   width: 100%
   border-bottom: 2px dashed #fff
-  top: 27px
+  top: 10px
   left: 0
 
 .finish
   position: absolute
   top: 0
-  right: 150px
-  height: 55px
+  right: 100px
+  height: 25px
   width: 10px
   background: url(../assets/img/finish.jpg) center center no-repeat
   background-size: cover
@@ -177,19 +176,19 @@ input[type="color"]::-webkit-color-swatch
 
 .car
   position: absolute
-  top: 8px
+  top: 2px
   left: 30px
 
 .car svg
-  width: 120px
+  width: 70px
 
 .car-control
   display: flex
-  margin-top: 20px
+  margin-top: 10px
 
 .car-control-btn
-  height: 26px
-  padding: 0 15px
+  height: 14px
+  padding: 0 10px
   display: flex
   align-items: center
   justify-content: center
@@ -197,6 +196,7 @@ input[type="color"]::-webkit-color-swatch
   border: 2px solid #7fff00
   border-radius: 3px
   margin-right: 10px
+  font-size: 12px
 
 .car-control-btn:hover
   background: #7fff00
@@ -204,6 +204,7 @@ input[type="color"]::-webkit-color-swatch
 
 #garage-pagination, #winners-pagination
   display: flex
+  flex-wrap: wrap
   justify-content: center
   align-items: center
   color: #7fff00
@@ -240,7 +241,7 @@ input[type="color"]::-webkit-color-swatch
 #winners-nav
   display: flex
   justify-content: space-between
-  margin-top: 70px
+  margin-top: 25px
   li
     width: calc(100%/5)
     text-align: center
@@ -254,7 +255,7 @@ input[type="color"]::-webkit-color-swatch
 .winner-descr
   display: flex
   justify-content: space-between
-  margin-top: 70px
+  margin-top: 20px
   padding-bottom: 10px
   position: relative
   &:not(&:last-child)
@@ -282,10 +283,27 @@ input[type="color"]::-webkit-color-swatch
 
   nav ul
     order: 2
-    margin-top: 50px
 
   h1
     order: 1
+    position: absolute
+    width: 50px
+    text-align: center
+    left: 15px
+    top: 15px
+    font-size: 20px
+
+  #winners-nav
+    margin-top: 50px
 
   #winners .car svg
     width: 80px
+
+  .cars-container li
+    margin-top: 15px
+    position: relative
+
+  .car-name
+    position: absolute
+    bottom: -5px
+    left: 210px

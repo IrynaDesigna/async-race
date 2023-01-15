@@ -2,19 +2,19 @@ import {canvas} from './canvas';
 import {url,winners,clearContainer,winnersPagination} from './main';
 import {getPagination, paginate} from './pagination';
 
-const winnersNav = document.createElement('ul');
-const winnersList = document.createElement('div');
-const winnersNum = document.createElement('li');
-const winnersIMG = document.createElement('li');
-const winnersNames = document.createElement('li');
-const winnersWins= document.createElement('li');
-const winnersBestTime = document.createElement('li');
-const winnerPagination = document.createElement('ul');
+const winnersNav = document.createElement('ul'),
+      winnersList = document.createElement('div'),
+      winnersNum = document.createElement('li'),
+      winnersIMG = document.createElement('li'),
+      winnersNames = document.createElement('li'),
+      winnersWins= document.createElement('li'),
+      winnersBestTime = document.createElement('li');
+// const winnerPagination = document.createElement('ul');
 
 winners.appendChild(winnersNav);
 winners.appendChild(winnersList);
-winners.appendChild(winnerPagination);
-winnerPagination.setAttribute('id', 'winners-pagination');
+winners.appendChild(winnersPagination);
+winnersPagination.setAttribute('id', 'winners-pagination');
 
 winnersNav.setAttribute('id', 'winners-nav')
 winnersNav.appendChild(winnersNum);
@@ -38,34 +38,22 @@ winnersBestTime.onclick = function(){sortByBestTime(winnersList)};
 
 export function getWinners(page,sort){
   clearContainer(winnersList);
-  let thisPageCars;
-  fetch(`${url}winners`, {
-    method: 'GET'
-  })
-  .then((response) => response.json())
-  .then((cars) => {
-    getPagination(cars,winnerPagination,winnersList)
-    let thisPageCars;
-    if (page) {
-      thisPageCars = paginate(winnerPagination,cars,7,page);
-    } else {
-      thisPageCars = paginate(winnerPagination,cars,7,1);
-    };
-    if (sort === 'by wins') {
-      thisPageCars = cars.sort((a, b) => b.wins - a.wins);
-    } else {
-      thisPageCars = cars.sort((a, b) => a.time - b.time);
-    }
-
-    // thisPageCars
-
-    for (const car of thisPageCars) {
-        buldWinner(car);
-    };
-  });
+  return fetch(`${url}winners`,{method: 'GET'}).then((res) => res.json())
+    .then((cars) => {
+      getPagination(cars,winnersPagination,winnersList)
+      let thisPageCars;
+      if (page && sort === 'by wins') {
+        thisPageCars = paginate(winnersPagination,cars.sort((a, b) => b.wins - a.wins),7,page);
+      } else if (page) {
+        thisPageCars = paginate(winnersPagination,cars.sort((a, b) => a.time - b.time),7,page);
+      } else {
+        thisPageCars = paginate(winnersPagination,cars,7,1);
+      };
+      for (const car of thisPageCars) {
+          buldWinner(car);
+      };
+    });
 }
-
-
 
 function buldWinner(winner) {
   fetch(`${url}garage/${winner.id}`, {
@@ -77,19 +65,16 @@ function buldWinner(winner) {
   });
 };
 
-
-
 function buildWinnners(car,winner) {
-  const winnerRender = document.createElement('ul');
-  const deleteWinner = document.createElement('li');
-  const number = document.createElement('li');
-  const image = document.createElement('li');
-  const name = document.createElement('li');
-  const wins = document.createElement('li');
-  const time = document.createElement('li');
+  const winnerRender = document.createElement('ul'),
+        deleteWinner = document.createElement('li'),
+        number = document.createElement('li'),
+        image = document.createElement('li'),
+        name = document.createElement('li'),
+        wins = document.createElement('li'),
+        time = document.createElement('li');
 
   winnersList.appendChild(winnerRender);
-  winnerRender.classList.add('winner-descr');
   winnerRender.appendChild(deleteWinner);
   winnerRender.appendChild(number);
   winnerRender.appendChild(image);
@@ -97,24 +82,22 @@ function buildWinnners(car,winner) {
   winnerRender.appendChild(wins);
   winnerRender.appendChild(time);
 
+  winnerRender.classList.add('winner-descr');
   deleteWinner.innerHTML = '<i class="fa-solid fa-trash"></i>';
   deleteWinner.classList.add('delete-winner');
   deleteWinner.setAttribute('id', `del-${car.id}`);
   number.innerText = car.id;
-
-
   image.classList.add('car');
   image.innerHTML = canvas;
   image.childNodes[4].childNodes[5].style.fill = car.color;
-
   name.innerText = car.name;
   wins.innerText = winner.wins;
   time.innerText = winner.time;
 
   deleteWinner.onclick = function(){winnerDelete(car.id,deleteWinner,winnerRender)};
-
 }
 
+// DELETE the Winner
 async function winnerDelete(id,btn,car) {
   if (btn.id === `del-${id}`) {
 
@@ -124,12 +107,12 @@ async function winnerDelete(id,btn,car) {
     getWinners(1);
   }
 }
-
+// SORT winners by wins quantity
 function sortByWins(winnersList) {
   const sort = 'by wins';
   getWinners(1,sort);
 }
-
+// SORT winners by the best time
 function sortByBestTime(winnersList) {
   getWinners(1);
 }
